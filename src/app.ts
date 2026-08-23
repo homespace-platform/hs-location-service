@@ -6,6 +6,17 @@ const PORT = Number(process.env.PORT ?? 9999);
 
 app.disable("x-powered-by");
 
+// Enable CORS for frontend applications (hs-web-app, hs-admin-portal, etc.)
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204);
+  }
+  next();
+});
+
 app.get("/health", (_req, res) => {
   res.json({ status: "UP" });
 });
